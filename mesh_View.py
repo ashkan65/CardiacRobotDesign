@@ -1,11 +1,13 @@
 import numpy as np
+import math
 import trimesh
-import networkx as nx
-from shapely.geometry import LineString
+# import networkx as nx
+# from shapely.geometry import LineString
 from robot import Sheath
+# from Polygons import plot
 # load a file by name or from a buffer
-# mesh = trimesh.load_mesh('BaseXSection.stl')
-mesh = trimesh.load_mesh('../3DBenchy.stl')
+# mesh = trimesh.load_mesh('Model/BaseXSection.stl')
+mesh = trimesh.load_mesh('Model/3DBenchy.stl')
 
 a = np.random.rand(3)
 b = np.random.rand(3)
@@ -39,21 +41,30 @@ mesh.moment_inertia
 # connected components of face adjacency
 # since this example mesh is a single watertight body we get a list of one mesh
 # mesh.split()
-meshes = [mesh,mesh2,mesh3]
-trimesh.Scene(meshes).show()
+meshes = [mesh, mesh2, mesh3]
+# trimesh.Scene(meshes).show()
+
+v = [[2.0, 0.0], [2.0, 2.0], [0.0, 2.0], [-2.0, 2.0], [-2.0, 0.0], [-2.0, -2.0], [0.0, -2.0], [2.0, -2.0], [2.0, 0.0]]
+v = np.array(v)
+e = np.array([[0, 1], [1, 2], [6, 3], [6, 4]])
+polygon = trimesh.path.polygons.edges_to_polygons(e, v)
+# Polygon.plot(polygon)
 for i in range (10):
     # print("here")
     mesh3 = trimesh.Trimesh(vertices=[100.0*a+float(i), 100.0*b, 100.0*c],
                        faces=[[0, 1, 2]])
     meshes = [mesh,mesh2,mesh3]
-    trimesh.Scene(meshes).update()
+    # trimesh.Scene(meshes).show()
 
-
+sh.set_cross(1)
+sh.path_gen()
+mesh4 = sh.mesh_gen()
+# trimesh.Scene(mesh4).show()
 # mesh2 = trimesh.Trimesh(vertices=[[110, 0, 0], [110, 0, 1], [110, 1, 0],[100,10,10]],
 #                        faces=[[0, 1, 2],[0,1,3]])
 # # preview mesh in a pyglet window from a terminal, or inline in a notebook
-# mesh.visual.face_colors = [200, 200, 250, 100]
-# meshes.show()
+# mesh4.visual.face_colors = [200, 200, 250, 100]
+mesh4.show()
 # trimesh.Scene(meshes).show()
 # coll_man = trimesh.collision.CollisionManager()
 # coll_man.add_object(name = "Benchy", mesh = mesh, transform=None)
